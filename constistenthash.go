@@ -43,4 +43,5 @@ func (c *Consistent) Remove(m string) error {
 	if m == "" {
 		return fmt.Errorf("not name is not defined")
 	}
+	return nil
 }
