@@ -7,6 +7,7 @@ import (
 )
 type Hasher interface {
 	Sum([]byte) []byte
+	Write([]byte) (int, error)
 }
 
 type Consistent struct {
@@ -29,7 +30,17 @@ func (c *Consistent) Add(m string) error {
 	if m == "" {
 		return fmt.Errorf("node name is not defined")
 	}
-
+	
+	if _, err := c.h.Write([]byte(m)); err != nil {
+		return err
+	}
+	fmt.Println(c.h.Sum(nil))
 	return nil
 
+}
+
+func (c *Consistent) Remove(m string) error {
+	if m == "" {
+		return fmt.Errorf("not name is not defined")
+	}
 }
