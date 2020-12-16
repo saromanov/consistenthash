@@ -15,6 +15,7 @@ type Consistent struct {
 	mu *sync.RWMutex
 }
 
+// New provides implementation of initializaer
 func New(hasher Hasher)*Consistent {
 	if hasher == nil {
 		hasher = sha1.New()
