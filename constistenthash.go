@@ -43,9 +43,13 @@ func (c *Consistent) AddMember(m string) error {
 
 }
 
-func (c *Consistent) Remove(m string) error {
+// RemoveMember implements removing of the member
+func (c *Consistent) RemoveMember(m string) error {
 	if m == "" {
 		return fmt.Errorf("not name is not defined")
 	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	delete(c.members, m)
 	return nil
 }
