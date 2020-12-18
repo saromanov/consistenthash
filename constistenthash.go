@@ -13,6 +13,7 @@ type Hasher interface {
 type Consistent struct {
 	h Hasher
 	mu *sync.RWMutex
+	members map[string]string
 }
 
 // New provides implementation of initializaer
@@ -23,19 +24,21 @@ func New(hasher Hasher)*Consistent {
 	return &Consistent {
 		h: hasher,
 		mu: &sync.RWMutex{},
+		members: map[string]string{},
 	}
 }
 
-// Add provides adding of the new member
-func (c *Consistent) Add(m string) error {
+// AddMember provides adding of the new member
+func (c *Consistent) AddMember(m string) error {
 	if m == "" {
 		return fmt.Errorf("node name is not defined")
 	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	
-	if _, err := c.h.Write([]byte(m)); err != nil {
-		return err
+	if _, ok := c.members[m]; ok {
+		return fmt.Errorf("member already added")
 	}
-	fmt.Println(c.h.Sum(nil))
 	return nil
 
 }
